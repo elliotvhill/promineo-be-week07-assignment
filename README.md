@@ -8,12 +8,43 @@ The weekly exercises are designed to augment the video lessons. In the exercises
 
 You will be working in a **Project schema** (database) that contains do-it-yourself (DIY) projects. A DIY project contains project details, materials, steps, and categories. Below is a diagram of the tables and relationships in the Project schema. Don't worry at this point if you don't understand what the diagram is telling you. This will become clear soon. For now, just know that there are five tables in the Project schema: `project`, `material`, `step`, `category`, and `project_category`. This is the **Entity Relationship Diagram** (ERD) you will build in the week 8 exercises:
 
+
 ```mermaid
-graph TD;
-    A[PROJECT] --> B(MATERIAL)
-    A --> C(STEP)
-    A --> D[CATEGORY]
+erDiagram
+    PROJECT ||--o{ MATERIAL : ""
+    PROJECT {
+        int project_id PK
+        string project_name
+        decimal estimated_hours
+        decimal actual_hours
+        string difficulty
+        text notes
+    }
+    MATERIAL {
+        int material_id PK
+        int project_id FK
+        string material_name
+        int num_required
+        decimal cost
+    }
+    PROJECT ||--o{ STEP : ""
+    STEP {
+        int step_id PK
+        text step_text
+        int step_order
+    }
+    PROJECT }o--o{ CATEGORY : ""
+    CATEGORY {
+        int category_id PK
+        string category_name
+    }
+    PROJECT_CATEGORY {
+        int project_id "PK, FK1"
+        int category_id "PK, FK2"
+    }
 ```
+
+
 
 There will be a final project in this (MySQL) part of the back-end course. These exercises will help prepare you for that.
 
