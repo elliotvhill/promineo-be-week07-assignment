@@ -19,7 +19,7 @@ public class ProjectsApp {
 	// @formatter:on
 
 	private Scanner scanner = new Scanner(System.in);
-	
+
 	private ProjectService projectService = new ProjectService();
 
 	public static void main(String[] args) {
@@ -34,20 +34,19 @@ public class ProjectsApp {
 		while (!done) {
 			try {
 				int selection = getUserSelection();
-				
+
 				switch (selection) {
-					case -1:
-						done = exitMenu();
-						break;
-					case 1:
-						createProject();
-						break;
-					default:
-						System.out.println("\n" + selection + " is not a valid selection. Try again.");
-						break;
+				case -1:
+					done = exitMenu();
+					break;
+				case 1:
+					createProject();
+					break;
+				default:
+					System.out.println("\n" + selection + " is not a valid selection. Try again.");
+					break;
 				}
-					
-				
+
 			} catch (Exception e) {
 				System.out.println("\nError: " + e + " Try again.");
 			}
@@ -61,17 +60,17 @@ public class ProjectsApp {
 		Integer difficulty = getIntInput("Enter the project difficulty (1-5)");
 		// TODO: code to validate difficulty input
 		String notes = getStringInput("Enter the project notes");
-		
+
 		Project project = new Project();
-		
+
 		project.setProjectName(projectName);
 		project.setEstimatedHours(estimatedHours);
 		project.setActualHours(actualHours);
 		project.setDifficulty(difficulty);
 		project.setNotes(notes);
-		
+
 		Project dbProject = projectService.addProject(project);
-		
+
 		System.out.println("You have successfully created project: " + dbProject);
 	}
 
@@ -82,12 +81,11 @@ public class ProjectsApp {
 		if (Objects.isNull(input)) {
 			return null;
 		}
-		
+
 		try {
 			// Create new BigDecimal object and set number of decimal places (scale) to 2:
 			return new BigDecimal(input).setScale(2);
-		} 
-		catch (NumberFormatException e) {
+		} catch (NumberFormatException e) {
 			throw new DbException(input + " is not a valid decimal number. Try again.");
 		}
 	}
@@ -118,48 +116,22 @@ public class ProjectsApp {
 		if (Objects.isNull(input)) {
 			return null;
 		}
-		
+
 		try {
 			// Convert string input to int:
 			return Integer.valueOf(input);
-		} 
-		catch (NumberFormatException e) {
+		} catch (NumberFormatException e) {
 			throw new DbException(input + " is not a valid number. Try again.");
 		}
 	}
 
 	private String getStringInput(String prompt) {
 		System.out.print(prompt + ": ");
-		
+
 		String input = scanner.nextLine();
-		
+
 		// Check if input is blank, else return trimmed input:
 		return input.isBlank() ? null : input.trim();
 	}
 
 }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
