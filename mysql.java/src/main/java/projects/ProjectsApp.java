@@ -53,6 +53,66 @@ public class ProjectsApp {
 		}
 	}
 
+	private void printOperations() {
+		System.out.println("\nThese are the available selections. Press the Enter key to quit:");
+
+		operations.forEach(line -> System.out.println("   " + line));
+	}
+
+	private boolean exitMenu() {
+		System.out.println("Exiting the menu.");
+		return true;
+	}
+
+	private int getUserSelection() {
+		printOperations();
+		Integer input = getIntInput("Enter a menu selection");
+
+		// Check for null value and return:
+		return Objects.isNull(input) ? -1 : input;
+	}
+
+	private String getStringInput(String prompt) {
+		System.out.print(prompt + ": ");
+
+		String input = scanner.nextLine();
+
+		// Check if input is blank, else return trimmed input:
+		return input.isBlank() ? null : input.trim();
+	}
+
+	private BigDecimal getDecimalInput(String prompt) {
+		String input = getStringInput(prompt);
+
+		// Check if input is null:
+		if (Objects.isNull(input)) {
+			return null;
+		}
+
+		try {
+			// Create new BigDecimal object and set number of decimal places (scale) to 2:
+			return new BigDecimal(input).setScale(2);
+		} catch (NumberFormatException e) {
+			throw new DbException(input + " is not a valid decimal number. Try again.");
+		}
+	}
+
+	private Integer getIntInput(String prompt) {
+		String input = getStringInput(prompt);
+
+		// Check if input is null:
+		if (Objects.isNull(input)) {
+			return null;
+		}
+
+		try {
+			// Convert string input to int:
+			return Integer.valueOf(input);
+		} catch (NumberFormatException e) {
+			throw new DbException(input + " is not a valid number. Try again.");
+		}
+	}
+
 	private void createProject() {
 		String projectName = getStringInput("Enter the project name");
 		BigDecimal estimatedHours = getDecimalInput("Enter the estimated hours");
@@ -72,66 +132,6 @@ public class ProjectsApp {
 		Project dbProject = projectService.addProject(project);
 
 		System.out.println("You have successfully created project: " + dbProject);
-	}
-
-	private BigDecimal getDecimalInput(String prompt) {
-		String input = getStringInput(prompt);
-
-		// Check if input is null:
-		if (Objects.isNull(input)) {
-			return null;
-		}
-
-		try {
-			// Create new BigDecimal object and set number of decimal places (scale) to 2:
-			return new BigDecimal(input).setScale(2);
-		} catch (NumberFormatException e) {
-			throw new DbException(input + " is not a valid decimal number. Try again.");
-		}
-	}
-
-	private boolean exitMenu() {
-		System.out.println("Exiting the menu.");
-		return true;
-	}
-
-	private int getUserSelection() {
-		printOperations();
-		Integer input = getIntInput("Enter a menu selection");
-
-		// Check for null value and return:
-		return Objects.isNull(input) ? -1 : input;
-	}
-
-	private void printOperations() {
-		System.out.println("\nThese are the available selections. Press the Enter key to quit:");
-
-		operations.forEach(line -> System.out.println("   " + line));
-	}
-
-	private Integer getIntInput(String prompt) {
-		String input = getStringInput(prompt);
-
-		// Check if input is null:
-		if (Objects.isNull(input)) {
-			return null;
-		}
-
-		try {
-			// Convert string input to int:
-			return Integer.valueOf(input);
-		} catch (NumberFormatException e) {
-			throw new DbException(input + " is not a valid number. Try again.");
-		}
-	}
-
-	private String getStringInput(String prompt) {
-		System.out.print(prompt + ": ");
-
-		String input = scanner.nextLine();
-
-		// Check if input is blank, else return trimmed input:
-		return input.isBlank() ? null : input.trim();
 	}
 
 }
