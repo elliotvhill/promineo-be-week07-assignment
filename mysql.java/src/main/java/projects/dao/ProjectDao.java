@@ -132,7 +132,7 @@ public class ProjectDao extends DaoBase {
 					project.getSteps().addAll(fetchStepsForProject(conn, projectId));
 					project.getCategories().addAll(fetchCategoriesForProject(conn, projectId));
 				}
-				
+
 				commitTransaction(conn);
 
 				return Optional.ofNullable(project);
@@ -145,18 +145,33 @@ public class ProjectDao extends DaoBase {
 			throw new DbException(e);
 		}
 	}
-	
-	private Collection<? extends Material> fetchMaterialsForProject(Connection conn, Integer projectId) throws SQLException {
-		// TODO Auto-generated method stub
-		return null;
+
+	private Collection<? extends Material> fetchMaterialsForProject(Connection conn, Integer projectId)
+			throws SQLException {
+		String sql = "SELECT c.* FROM " + MATERIAL_TABLE + " m WHERE project_id = ?";
+
+		try (PreparedStatement stmt = conn.prepareStatement(sql)) {
+			setParameter(stmt, 1, projectId, Integer.class);
+
+			try (ResultSet rs = stmt.executeQuery()) {
+				List<Material> materials = new LinkedList<>();
+
+				while (rs.next()) {
+					materials.add(extract(rs, Material.class));
+				}
+
+				return materials;
+			}
+		}
 	}
-	
+
 	private Collection<? extends Step> fetchStepsForProject(Connection conn, Integer projectId) throws SQLException {
 		// TODO Auto-generated method stub
 		return null;
 	}
 
-	private Collection<? extends Category> fetchCategoriesForProject(Connection conn, Integer projectId) throws SQLException {
+	private Collection<? extends Category> fetchCategoriesForProject(Connection conn, Integer projectId)
+			throws SQLException {
 		// TODO Auto-generated method stub
 		return null;
 	}
