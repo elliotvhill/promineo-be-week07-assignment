@@ -147,7 +147,7 @@ public class ProjectDao extends DaoBase {
 	}
 
 	private List<Material> fetchMaterialsForProject(Connection conn, Integer projectId) throws SQLException {
-		String sql = "SELECT c.* FROM " + MATERIAL_TABLE + " m WHERE project_id = ?";
+		String sql = "SELECT m.* FROM " + MATERIAL_TABLE + " m WHERE project_id = ?";
 
 		try (PreparedStatement stmt = conn.prepareStatement(sql)) {
 			setParameter(stmt, 1, projectId, Integer.class);
@@ -183,8 +183,25 @@ public class ProjectDao extends DaoBase {
 	}
 
 	private List<Category> fetchCategoriesForProject(Connection conn, Integer projectId) throws SQLException {
-		List<Category> categories = new LinkedList<>();
-		return categories;
-	}
+		// @formatter:off
+		String sql = ""
+				+ "SELECT c.* FROM " + CATEGORY_TABLE + " c "
+				+ "JOIN " + PROJECT_CATEGORY_TABLE + " pc USING (category_id) "
+				+ "WHERE project_id = ?";
+		// @formatter:on
 
+		try (PreparedStatement stmt = conn.prepareStatement(sql)) {
+			setParameter(stmt, 1, projectId, Integer.class);
+
+			try (ResultSet rs = stmt.executeQuery()) {
+				List<Category> categories = new LinkedList<>();
+
+				while (rs.next()) {
+					categories.add(extract(rs, Category.class));
+				}
+
+				return categories;
+			}
+		}
+	}
 }
