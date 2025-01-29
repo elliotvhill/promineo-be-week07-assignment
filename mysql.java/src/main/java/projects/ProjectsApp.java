@@ -64,12 +64,12 @@ public class ProjectsApp {
 	private void selectProject() {
 		listProjects();
 		Integer projectId = getIntInput("Enter a project ID to select a project");
-		
+
 		// Un-select any currently-selected project
 		curProject = null;
-		
+
 		curProject = projectService.fetchProjectById(projectId);
-		
+
 		if (Objects.isNull(curProject)) {
 			System.out.println("Invalid project ID selected.");
 		}
@@ -79,7 +79,7 @@ public class ProjectsApp {
 		System.out.println("\nThese are the available selections. Press the Enter key to quit:");
 
 		operations.forEach(line -> System.out.println("   " + line));
-		
+
 		if (Objects.isNull(curProject)) {
 			System.out.println("\nYou are not working with a project.");
 		} else {
