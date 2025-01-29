@@ -146,8 +146,7 @@ public class ProjectDao extends DaoBase {
 		}
 	}
 
-	private Collection<? extends Material> fetchMaterialsForProject(Connection conn, Integer projectId)
-			throws SQLException {
+	private List<Material> fetchMaterialsForProject(Connection conn, Integer projectId) throws SQLException {
 		String sql = "SELECT c.* FROM " + MATERIAL_TABLE + " m WHERE project_id = ?";
 
 		try (PreparedStatement stmt = conn.prepareStatement(sql)) {
@@ -165,15 +164,27 @@ public class ProjectDao extends DaoBase {
 		}
 	}
 
-	private Collection<? extends Step> fetchStepsForProject(Connection conn, Integer projectId) throws SQLException {
-		// TODO Auto-generated method stub
-		return null;
+	private List<Step> fetchStepsForProject(Connection conn, Integer projectId) throws SQLException {
+		String sql = "SELECT s.* FROM " + STEP_TABLE + " s WHERE project_id = ?";
+
+		try (PreparedStatement stmt = conn.prepareStatement(sql)) {
+			setParameter(stmt, 1, projectId, Integer.class);
+
+			try (ResultSet rs = stmt.executeQuery()) {
+				List<Step> steps = new LinkedList<>();
+
+				while (rs.next()) {
+					steps.add(extract(rs, Step.class));
+				}
+
+				return steps;
+			}
+		}
 	}
 
-	private Collection<? extends Category> fetchCategoriesForProject(Connection conn, Integer projectId)
-			throws SQLException {
-		// TODO Auto-generated method stub
-		return null;
+	private List<Category> fetchCategoriesForProject(Connection conn, Integer projectId) throws SQLException {
+		List<Category> categories = new LinkedList<>();
+		return categories;
 	}
 
 }
