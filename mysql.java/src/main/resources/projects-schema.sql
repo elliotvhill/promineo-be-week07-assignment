@@ -44,9 +44,56 @@ CREATE TABLE material (
 	num_required INT,
 	cost DECIMAL(7,2),
 	PRIMARY KEY (material_id),
-	FOREIGN KEY (project_id) REFERENCES project (project_id)
+	FOREIGN KEY (project_id) REFERENCES project (project_id) ON DELETE CASCADE;
 );
 
+-- Hang a door project
+INSERT INTO project (project_name, estimated_hours, actual_hours, difficulty, notes)
+VALUES ('Hang a door', '3', '2', '3', 'hang a closet door');
+
+INSERT INTO material (project_id, material_name, num_required, cost)
+VALUES 
+	(1, 'Door hanger kit from Home Depot', 1, 20.00),
+	(1, '2-inch screws', 4, 2.49);
+
+INSERT INTO step (project_id, step_text, step_order)
+VALUES
+	(1, 'Align door hangers using kit from Home Depot', 1),
+	(1, 'Secure the door with 2-inch screws', 2);
+
+INSERT INTO category (category_id, category_name)
+VALUES
+	(1, 'Repairs'),
+	(2, 'Windows and doors');
+
+INSERT INTO project_category (project_id, category_id)
+VALUES
+	(1, 1),
+	(1, 2);
+
+-- Patch a wall project
+INSERT INTO project (project_name, estimated_hours, actual_hours, difficulty, notes)
+VALUES ('Patch a wall', '3', '3', '4', 'patch a hole in a wall');
+
+INSERT INTO material (project_id, material_name, num_required, cost)
+VALUES 
+	(2, 'Wall patch kit from Home Depot', 1, 20.00),
+	(2, 'Caulk', 1, 2.49),
+	(2, 'Scraper', 1, 1.99);
+
+INSERT INTO step (project_id, step_text, step_order)
+VALUES
+	(2, 'Cut drywall patch from patch kit to size', 1),
+	(2, 'Insert patch into hole', 2),
+	(2, 'Cover patch with caulk', 3),
+	(2, 'Smooth caulking using scraper', 4),
+	(2, 'Let dry for minimum 24 hours before painting', 5);
+
+INSERT INTO project_category (project_id, category_id)
+VALUES
+	(2, 1);
+
+-- Bird house project
 INSERT INTO project (project_name, estimated_hours, actual_hours, difficulty, notes)
 VALUES ('Build a bird house', '3', '3.5', '4', 'build a basic bird house');
 
