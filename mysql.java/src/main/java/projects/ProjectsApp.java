@@ -17,7 +17,8 @@ public class ProjectsApp {
 			"1) Add a project",
 			"2) List projects",
 			"3) Select a project",
-			"4) Update project details"
+			"4) Update project details",
+			"5) Delete a project"
 			);
 	// @formatter:on
 
@@ -58,6 +59,10 @@ public class ProjectsApp {
 				case 4:
 					updateProjectDetails();
 					break;
+					
+				case 5:
+					deleteProject();
+					break;
 
 				default:
 					System.out.println("\n" + selection + " is not a valid selection. Try again.");
@@ -67,6 +72,21 @@ public class ProjectsApp {
 			} catch (Exception e) {
 				System.out.println("\nError: " + e + " Try again.");
 			}
+		}
+	}
+
+	private void deleteProject() {
+		listProjects();
+		Integer projectId = getIntInput("Enter the ID of the project to delete");
+		
+		if (Objects.nonNull(projectId)) {
+			projectService.deleteProject(projectId);
+			
+			System.out.println("\nYou have deleted project ID=" + projectId);
+		}
+		
+		if (Objects.nonNull(curProject) && curProject.getProjectId().equals(projectId)) {
+			curProject = null;
 		}
 	}
 
