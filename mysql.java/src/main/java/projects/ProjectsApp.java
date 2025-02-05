@@ -16,7 +16,8 @@ public class ProjectsApp {
 	private List<String> operations = List.of(
 			"1) Add a project",
 			"2) List projects",
-			"3) Select a project"
+			"3) Select a project",
+			"4) Update project details"
 			);
 	// @formatter:on
 
@@ -41,15 +42,23 @@ public class ProjectsApp {
 				case -1:
 					done = exitMenu();
 					break;
+
 				case 1:
 					createProject();
 					break;
+
 				case 2:
 					listProjects();
 					break;
+
 				case 3:
 					selectProject();
 					break;
+
+				case 4:
+					updateProjectDetails();
+					break;
+
 				default:
 					System.out.println("\n" + selection + " is not a valid selection. Try again.");
 					break;
@@ -59,6 +68,40 @@ public class ProjectsApp {
 				System.out.println("\nError: " + e + " Try again.");
 			}
 		}
+	}
+
+	private void updateProjectDetails() {
+		if (Objects.isNull(curProject)) {
+			System.out.println("\nPlease select a project.");
+			return;
+		}
+
+		String projectName = getStringInput("Enter the project name [" + curProject.getProjectName() + "]");
+		BigDecimal estimatedHours = getDecimalInput("Enter estimated hours [" + curProject.getEstimatedHours() + "]");
+		BigDecimal actualHours = getDecimalInput("Enter actual hours [" + curProject.getActualHours() + "]");
+		Integer difficulty = getIntInput("Enter project difficulty [" + curProject.getDifficulty() + "]");
+		String notes = getStringInput("Enter project notes [" + curProject.getNotes() + "]");
+
+		Project project = new Project();
+
+		// @formatter:off
+		// Set new project object fields if not null
+		project.setProjectId(curProject.getProjectId());
+		
+		project.setProjectName(Objects.isNull(projectName) 
+				? curProject.getProjectName() : projectName);
+		project.setEstimatedHours(Objects.isNull(estimatedHours) 
+				? curProject.getEstimatedHours() : estimatedHours);
+		project.setActualHours(Objects.isNull(actualHours) 
+				? curProject.getActualHours() : actualHours);
+		project.setDifficulty(Objects.isNull(difficulty)
+				? curProject.getDifficulty() : difficulty);
+		project.setNotes(Objects.isNull(notes)
+				? curProject.getNotes() : notes);
+		// @formatter:on
+		
+		projectService.modifyProjectDetails(project);
+		curProject = projectService.fetchProjectById(curProject.getProjectId());
 	}
 
 	private void selectProject() {
